@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.9.8/chartist.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
@@ -10,195 +11,177 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 <script type="text/javascript">
-$(document).ready(function() {
-  $(".project").addClass("img-rounded col-xs-5");
-  $(".project:odd").addClass("right");
-  $(".project:even").addClass("left");
-});
-$(window).scroll(function() {
-  if ($(window).scrollTop() > $(".opener").offset().top) {
-    $(".navbar").css("opacity", "0.50");
-    $(".navbar").mouseover(function() {
-      $(".navbar").css("opacity", "1.0");
+var breakLength;
+var workLength;
+var workLeft = get_Length("workTime");
+var totalDisplay = 60;
+var timer;
+var isOn = false;
+var initialState = true;
+
+function get_Length(type) {
+  var arr = $("input[name='" + type + "']").val().split(":");
+  return Number(arr[0]);
+}
+
+function getData() {
+  var data = {
+    labels: ["Break","Work",getLabel()],
+    series: [get_Length("breakTime"), workLeft, totalDisplay - workLeft - get_Length("breakTime")]
+  }
+  return data;
+}
+function getLabel(){
+  var label;
+  if(initialState){label = "Click to start";}
+  else if(isOn){label = toTime(workLeft);}
+  else if(!isOn){label = "Click again to restart";}
+  return label;
+}
+var options = {
+  showLabel: true,
+  labelPosition: 'inside',
+  labelDirection: 'neutral',
+  donut: true
+}
+
+var myChart;
+
+window.onload = function() {
+  workLeft = get_Length("workTime");
+  myChart = new Chartist.Pie('.ct-chart', getData(), options).on('draw', (context) => {
+  if (context.type === 'label' && context.index==2) {
+    context.element.attr({
+      dx: context.element.root().width() / 2,
+      dy: context.element.root().height() / 2
     });
-    $(".navbar").mouseout(function() {
-      $(".navbar").css("opacity", "0.5");
-    });
-  } else {
-    $(".navbar").css("opacity", "1.0");
   }
 });
-$(".navbutton").mouseover(function(){
-  $(this).addClass("highlight");
-});
-$(".navbutton").mouseout(function(){
-  $(this).removeClass("highlight");
-});
+}
+
+function init(){
+  if(initialState){initialState = false;}
+  timer = setInterval(updateTime, 1000);
+  if(!isOn){toggleOn();}
+  workLeft = get_Length("workTime");
+}
+
+function updateTime() {
+  var interval = 1000;
+  workLeft = workLeft - interval / (60 * 1000);
+  if (workLeft <= 0) {
+    clearInterval(timer);
+  }
+  try {
+    myChart.update(getData());
+  } catch (e) {
+    console.log("error");
+  }
+  if(workLeft <= 0){alert("Take a break!");}
+}
+
+$("button").click(function() {
+  var fieldName = $(this).attr("data-field");
+  var type = $(this).attr("data-type");
+  var input = $("input[name='" + fieldName + "']");
+  var amount = input.val().split(":");
+
+  if (type == "minus") {
+    amount[0] = Number(amount[0]) - 1;
+  } else if (type == "plus") {
+    amount[0] = Number(amount[0]) + 1;
+  }
+  var newVal = amount.join(":");
+  input.val(newVal);
+  
+  if(Number(amount[0]) <= 0){
+    $("button[data-type='minus'][data-field='" + fieldName + "']").prop('disabled', true); 
+  } else {
+    $("button[data-type='minus'][data-field='" + fieldName + "']").prop('disabled', false); 
+  }
+})
+$("#chartClick").click(function() {
+  if (isOn) {
+    clearInterval(timer);
+    toggleOn();
+  } else if(!isOn) {
+    init();
+  }
+  myChart.update(getData());
+})
+
+function toggleOn(){
+  isOn = !isOn;
+  if(isOn){
+    $(":button").prop('disabled', true); 
+  }
+  if(!isOn){
+    $(":button").prop('disabled', false); 
+  }
+}
+function toTime(value){
+  if(value < 0){value = 0;}
+  var seconds = Math.floor((value * 60)%60);
+  if(seconds < 10){seconds = "0" + seconds;}
+  return Math.floor(value) + ":" + seconds;
+}
 </script>
 <style type="text/css">
-  body {
-  background-color:#2B2B2B;
+ body {
+  margin-top:30px;
+  text-align:center;
+  background-color:#118C4E;
 }
-h1 {
-  font-size: 4vw;
+.box {
+  width: 40%;
+  margin: auto;
+  text-align: center;
 }
-h2 {
-  font-size: 2vw;
+.btn {
+  background-color: #585858;
 }
-.opener {
-  margin-top: 50px;
-  display:inline-block;
-  background-size: 100%;
-  width: 100%;
-  background-repeat: no-repeat;
-  z-index: 0;
-  height: 0;
-  padding-bottom: 45%;
-  border-top:1px solid white;
-  border-bottom:1px solid white;
+input {
+  background-color: #C1E1A6;
 }
-.navbar {
-  background-color:#2B2B2B;
-  position: fixed;
-  opacity: 1;
-  text-align: right;
-  z-index: 1;
-  width: 100%;
+.ct-labels, .ct-grids {
+  display: none;
 }
-.intro {
-  float: right;
-  text-align: right;
-  width: 50%;
-  color: white;
-  padding-right: 2%;
-  text-shadow: 2px 2px #000;
-}
-.portfolio {
-  width: 100%;
-  background-color: #A2AB58;
-  margin-top:10px;
-  margin-bottom:10px;
-  border-top:1px solid white;
-  border-bottom:1px solid white;
-}
-.project {
-  border: 1px solid white;
-  background-color:#2B2B2B;
-  height: 300px;
-  border-stlye: solid;
-  margin-left: 30px;
-  margin-right: 30px;
-  margin-bottom:30px;
-  padding: 5px;
-}
-.right {
-  float: right;
-}
-.left {
-  float: left;
-}
-.navbutton {
-  background-color: #E44424;
-}
-.contactBox {
-  background-color: #67BCDB;
-  height: 400px;
-  border-top:1px solid white;
-  border-bottom:1px solid white;
-}
-.contactForm {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  padding-left:10px;
-}
-.social {
-}
-.contactlinks {
-  display: inline-block;
-}
-.socialButton {
-  border-radius: 50%;
-  width:50px;
-  height:50px;
-  background-size:100%;
-}
-.highlight {
-  border-width: 4px;
-  border-style: solid;
-}
-.preview{
-  height:100%;
-  width:100%;
-}
-.contactInput {
-  width:70%;
-  margin-bottom:4px;
-}
-h1 {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-top : 1px dashed white;
-  border-bottom : 1px dashed white;
+.ct-label{
+  font-size:1.5em;
 }
 </style>
 <html>
   <body>
-  <div class="navbar container" align="center" id="navbar">
-
-  <a href="#top" style="color:#2B2B2B"><button class="navbutton btn">Introduction</button></a>
-
-  <a href="#portfolio" style="color:#2B2B2B"><button class="navbutton btn">
-   Read my portfolio
-    </button></a>
-
-  <a href="#contact" style="color:#2B2B2B"><button class="navbutton btn">Contact me</button></a>
-
-</div>
-<a name="top"></a>
-<div style="background-image: url(https://s31.postimg.org/puyibeoaj/Fitz_Roy.jpg)" class="opener container" id="opener">
-  <div class="intro">
-    <h1>Welcome, my name is Peter</h1>
-    <h2>I am a Philadelphia-based engineer teaching myself web design</h2>
-  </div>
-</div>
-<div class="portfolio container" align="center">
-  <a name="portfolio"></a>
-  <h1 style="color: white; width:50%">Portfolio</h1>
-  <div class="row" align="center">
-    <div class="project" id="project1">
-      <iframe class="preview" src="https://parmytank.github.io/FCCprojects/#portfolio"></iframe>
+  <div class="box">
+  <div class="row" style="width:100%; margin:auto">
+    <div class="toggle col-xs-6">
+      <span>
+      <button type="button" class="btn btn-default" data-type="minus" data-field="breakTime">
+        <span class="glyphicon glyphicon-minus"></span>
+      </button>
+      <input type="text" name="breakTime" value="5:00" disabled style="width:40%" min="0" max="15">
+      <button type="button" class="btn btn-default" data-type="plus" data-field="breakTime">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      </span>
+      <h4>Break Length</h4>
     </div>
-    <div class="project" id="project2">
-      <iframe class="preview" src="http://codepen.io/parmytank/full/NAjjyN/"></iframe>
+    <div class="toggle col-xs-6">
+      <span>
+      <button type="button" class="btn btn-default" data-type="minus" data-field="workTime">
+        <span class="glyphicon glyphicon-minus"></span>
+      </button>
+      <input type="text" name="workTime" value="25:00" disabled style="width:40%" min="0" max="15">
+      <button type="button" class="btn btn-default" data-type="plus" data-field="workTime">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      </span>
+      <h4>Work Length</h4>
     </div>
   </div>
-  <div class="row">
-    <div class="project" id="project3">
-      <iframe class="preview" src="http://codepen.io/parmytank/full/ezgLjW/"></iframe>
-    </div>
-    <div class="project" id="project4">
-      <iframe class="preview" src="http://codepen.io/parmytank/full/LZbpQj/"></iframe>
-    </div>
-  </div>
-</div>
-<div class="contactBox">
-  <a name="contact"></a>
-  <div class="contactForm col-xs-6">
-    <h1>Contact Me</h1>
-    <input type="text" class="contactInput" placeholder="name">
-    <input type="text" class="contactInput" placeholder="e-mail">
-    <input type="text" class="contactInput" placeholder="phone">
-    <textarea rows="4" cols="50" name="message" style="height:100px" class="contactInput" placeholder="message"></textarea>
-    <button class="btn btn-default" style="width:30%"><span class="glyphicon glyphicon-envelope"></span> Send</button>
-  </div>
-  <div class="social col-xs-6">
-    <h1>Social</h1>
-    <div class="contactlinks">
-      <a href="http://github.com/parmytank.html" target="_blank"><button class="socialButton" style="background-image: url(https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png)"></button></a>
-      <a href="https://www.freecodecamp.com/parmytank" target="_blank"><button class="socialButton" style="background-image: url(http://codeslo.com/wp-content/uploads/2015/10/FCC.png)"></button></a>
-    </div>
-  </div>
+  <a id="chartClick">
+    <div class="ct-chart ct-perfect-fourth"></div>
+  </a>
 </div>
 </body>
 </html>
