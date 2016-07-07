@@ -17,7 +17,37 @@
   </head>
   <body>
   <div class="ct-chart ct-perfect-fourth"></div>
-  
+  <div class="box">
+  <div class="row" style="width:100%; margin:auto">
+    <div class="toggle col-xs-6">
+      <span>
+      <button type="button" class="btn btn-default" data-type="minus" data-field="breakTime">
+        <span class="glyphicon glyphicon-minus"></span>
+      </button>
+      <input type="text" name="breakTime" value="5:00" disabled style="width:40%" min="0" max="15">
+      <button type="button" class="btn btn-default" data-type="plus" data-field="breakTime">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      </span>
+      <h4>Break Length</h4>
+    </div>
+    <div class="toggle col-xs-6">
+      <span>
+      <button type="button" class="btn btn-default" data-type="minus" data-field="workTime">
+        <span class="glyphicon glyphicon-minus"></span>
+      </button>
+      <input type="text" name="workTime" value="25:00" disabled style="width:40%" min="0" max="15">
+      <button type="button" class="btn btn-default" data-type="plus" data-field="workTime">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      </span>
+      <h4>Work Length</h4>
+    </div>
+  </div>
+  <a id="chartClick">
+    <div class="ct-chart ct-perfect-fourth"></div>
+  </a>
+</div>
 </body>
 </html>
 <script type="text/javascript">
