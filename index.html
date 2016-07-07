@@ -1,43 +1,41 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Pomodoro by parmytank</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Pomodoro</h1>
-      <h2 class="project-tagline">A pomodoro clock</h2>
-      <a href="https://github.com/parmytank/pomodoro" class="btn">View on GitHub</a>
-      <a href="https://github.com/parmytank/pomodoro/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/parmytank/pomodoro/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
 
-    <section class="main-content">
-      <p>&lt;!DOCTYPE html&gt;</p>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-
-
-
-<p></p>
-
-
-
-<p></p>
-
-
-
-
-
-
-
-
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".project").addClass("img-rounded col-xs-5");
+  $(".project:odd").addClass("right");
+  $(".project:even").addClass("left");
+});
+$(window).scroll(function() {
+  if ($(window).scrollTop() > $(".opener").offset().top) {
+    $(".navbar").css("opacity", "0.50");
+    $(".navbar").mouseover(function() {
+      $(".navbar").css("opacity", "1.0");
+    });
+    $(".navbar").mouseout(function() {
+      $(".navbar").css("opacity", "0.5");
+    });
+  } else {
+    $(".navbar").css("opacity", "1.0");
+  }
+});
+$(".navbutton").mouseover(function(){
+  $(this).addClass("highlight");
+});
+$(".navbutton").mouseout(function(){
+  $(this).removeClass("highlight");
+});
+</script>
+<style type="text/css">
   body {
   background-color:#2B2B2B;
 }
@@ -143,87 +141,64 @@ h1 {
   border-top : 1px dashed white;
   border-bottom : 1px dashed white;
 }
+</style>
+<html>
+  <body>
+  <div class="navbar container" align="center" id="navbar">
 
+  <a href="#top" style="color:#2B2B2B"><button class="navbutton btn">Introduction</button></a>
 
-<p>
-  </p>
-  <div align="center" id="navbar">
-
-<p><a href="#top">Introduction</a></p>
-
-<p><a href="#portfolio">
+  <a href="#portfolio" style="color:#2B2B2B"><button class="navbutton btn">
    Read my portfolio
-    </a></p>
+    </button></a>
 
-<p><a href="#contact">Contact me</a></p>
+  <a href="#contact" style="color:#2B2B2B"><button class="navbutton btn">Contact me</button></a>
 
-<p></p>
 </div>
 <a name="top"></a>
-
-<div id="opener">
-  <div>
-    <h1>
-<a id="welcome-my-name-is-peter" class="anchor" href="#welcome-my-name-is-peter" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome, my name is Peter</h1>
-    <h2>
-<a id="i-am-a-philadelphia-based-engineer-teaching-myself-web-design" class="anchor" href="#i-am-a-philadelphia-based-engineer-teaching-myself-web-design" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>I am a Philadelphia-based engineer teaching myself web design</h2>
+<div style="background-image: url(https://s31.postimg.org/puyibeoaj/Fitz_Roy.jpg)" class="opener container" id="opener">
+  <div class="intro">
+    <h1>Welcome, my name is Peter</h1>
+    <h2>I am a Philadelphia-based engineer teaching myself web design</h2>
   </div>
 </div>
-
-<div align="center">
+<div class="portfolio container" align="center">
   <a name="portfolio"></a>
-  <h1>
-<a id="portfolio" class="anchor" href="#portfolio" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Portfolio</h1>
-  <div align="center">
-    <div id="project1">
-      
+  <h1 style="color: white; width:50%">Portfolio</h1>
+  <div class="row" align="center">
+    <div class="project" id="project1">
+      <iframe class="preview" src="https://parmytank.github.io/FCCprojects/#portfolio"></iframe>
     </div>
-    <div id="project2">
-      
+    <div class="project" id="project2">
+      <iframe class="preview" src="http://codepen.io/parmytank/full/NAjjyN/"></iframe>
     </div>
   </div>
-  <div>
-    <div id="project3">
-      
+  <div class="row">
+    <div class="project" id="project3">
+      <iframe class="preview" src="http://codepen.io/parmytank/full/ezgLjW/"></iframe>
     </div>
-    <div id="project4">
-      
+    <div class="project" id="project4">
+      <iframe class="preview" src="http://codepen.io/parmytank/full/LZbpQj/"></iframe>
     </div>
   </div>
 </div>
-
-<div>
+<div class="contactBox">
   <a name="contact"></a>
-  <div>
-    <h1>
-<a id="contact-me" class="anchor" href="#contact-me" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact Me</h1>
-    
-    
-    
-    
-     Send
+  <div class="contactForm col-xs-6">
+    <h1>Contact Me</h1>
+    <input type="text" class="contactInput" placeholder="name">
+    <input type="text" class="contactInput" placeholder="e-mail">
+    <input type="text" class="contactInput" placeholder="phone">
+    <textarea rows="4" cols="50" name="message" style="height:100px" class="contactInput" placeholder="message"></textarea>
+    <button class="btn btn-default" style="width:30%"><span class="glyphicon glyphicon-envelope"></span> Send</button>
   </div>
-  <div>
-    <h1>
-<a id="social" class="anchor" href="#social" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Social</h1>
-    <div>
-      <a href="http://github.com/parmytank.html"></a>
-      <a href="https://www.freecodecamp.com/parmytank"></a>
+  <div class="social col-xs-6">
+    <h1>Social</h1>
+    <div class="contactlinks">
+      <a href="http://github.com/parmytank.html" target="_blank"><button class="socialButton" style="background-image: url(https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png)"></button></a>
+      <a href="https://www.freecodecamp.com/parmytank" target="_blank"><button class="socialButton" style="background-image: url(http://codeslo.com/wp-content/uploads/2015/10/FCC.png)"></button></a>
     </div>
   </div>
 </div>
-
-<p>
-</p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/parmytank/pomodoro">Pomodoro</a> is maintained by <a href="https://github.com/parmytank">parmytank</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
-  </body>
+</body>
 </html>
