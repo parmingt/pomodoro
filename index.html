@@ -15,6 +15,11 @@ body {
   text-align:center;
   background-color:#118C4E;
 }
+.toggle{
+  display: flex;
+  flex-direction:row;
+  justify-content: center;
+}
 .box {
   width: 40%;
   margin: auto;
@@ -46,8 +51,8 @@ input {
   <body>
   <div class="box">
   <div class="row" style="width:100%; margin:auto">
-    <div class="toggle col-xs-6">
-      <span>
+    <div class="col-xs-6">
+      <span class="toggle">
       <button type="button" class="btn btn-default" data-type="minus" data-field="breakTime">
         <span class="glyphicon glyphicon-minus"></span>
       </button>
